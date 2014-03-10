@@ -1,0 +1,32 @@
+## HotSwapper
+#### A bash program to easily switch between building several popular aftermarket ROMS.
+
+This is a bastard daughter of my patchScripts program, which I used to create roms to support OpenPDroid and the Auto-patcher. I thought maybe it could be useful split into a discrete program as well.
+
+This will allow you to quickly hotswap between building CyanogenMod to building ParanoidAndroid, or to building OmniRom or SlimRom. You _should_ be able to swap between build flavors with one easy command.
+
+* This __will not__ add support for your device if the ROM does not already provide it. All it does is provide some relief from the standard-less practices we have with branch names and so on.
+
+* __You will need to have a functional build environment!__ This means have all dependencies installed and repo up and running. It's easy, go from the beginning to the ```export PATH=${PATH}:~/bin``` line [at this document](http://wiki.cyanogenmod.org/w/Build_for_grouper#Put_the_.7E.2Fbin_directory_in_your_path_of_execution).
+
+
+####You WILL want to edit the enviromental variables in ```BUILD```!
+
+The ```BUILD``` file sets the environment and lets you choose your target device and Android version. Use it or WOE BETIDE YOU!
+
+     ANDROID_HOME       # this is the root of your Android source tree
+     TARGET=mako
+     MANUFACTURER=lge
+     TARGET_VERSION=4.4
+    
+### Usage
+
+Totally simple:  ```./HotSwapper make <ROMTYPE> <ANDROID_VERSION>```
+
+Example: ```./HotSwapper make cm 4.4```
+
+That will make a CyanogenMod Rom from the latest code for Android 4.4.
+
+Valid <ROMTYPES> are: (aosp, aokp, pa, pac, vanir, omni, slim, cm)
+
+**Everything for the auto-patcher and patchScripts is freely available under the MIT License. See the included license for details.**

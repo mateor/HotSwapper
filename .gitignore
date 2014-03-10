@@ -1,0 +1,9 @@
+# backup files
+*~
+*bak
+
+# IPC file
+.iproc
+
+# debugging log
+DEBUG.log

@@ -1,0 +1,81 @@
+#!/bin/bash
+
+# The MIT License (MIT)
+#
+# Copyright (c) 2014 Mateor
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+# THE SOFTWARE.
+
+# Switch between building any of several popular custom ROMs.
+
+
+# PLEASE edit values in BUILD file or WOE BETIDE YOU!
+
+# populate environmental variables and pass to children
+source BUILD
+set -a
+
+
+usage () {
+     echo ""
+     echo "DESCRIPTION:"
+     echo ""
+     echo "Small shell app by @mateor."
+     echo "    Easily switch between custom rom flavors and branches."
+     echo ""
+     echo "!! You will want to set some environmental variables in the BUILD file !!"
+     echo ""
+     echo "OPTIONS:"
+     echo "    ${bold}make${normal} ( ${bold}<ROMTYPE>${normal} || ${bold}<TARGET_VERSION>${normal} )" 
+     echo "           : creates a flashable zip of one of several ROMTYPES"
+     echo ""
+     echo "             valid ${bold}ROMTYPES${normal} are ( aosp, cm, aokp, omni, pac, pa, vanir, slim)"
+     echo "             valid ${bold}TARGET_VERSION${normal} depends on ROMTYPE, it's the Android version:
+                              (2.3, 4.0, 4.1. 4.2. 4.3. 4.4 )"
+     echo "             This command should pull sources, lunch, and build binaries"
+     echo ""
+     exit $exit_code
+}
+
+if [[ "$#" == 0 ]]; then
+     usage
+fi
+
+# check for lifelines
+for arg in $@; do
+     #TODO @mateor Add a help for each command
+     if ( [[ $arg == "h" ]] || [[ $arg == "-h" ]] || [[ $arg == "--h" ]] || [[ $arg == "help" ]] || [[ $arg == "-help" ]] || [[ $arg == "--help" ]] ); then
+          usage
+     fi
+done
+
+case "$1" in
+[Mm]ake)
+     # I would at one point like to manage the exit code to make these conditional
+     #    but it will require some investigation into the standard return values from make.
+     source $HOT_SWAPPER_LOC/src/orderBuilds.sh "$2" "$3"
+     ;;
+*)
+     echo ""
+     echo "!!! Command not recognized !!!"
+     exit_code=-1 && usage
+     ;;
+esac
+
+exit 0
