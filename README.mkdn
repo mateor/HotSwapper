@@ -7,7 +7,7 @@ This will allow you to quickly hotswap between building CyanogenMod to building 
 
 * This __will not__ add support for your device if the ROM does not already provide it. All it does is provide some relief from the standard-less practices we have with branch names and so on.
 
-* __You will need to have a functional build environment!__ This means have all dependencies installed and repo up and running. It's easy, go from the beginning to the ```export PATH=${PATH}:~/bin``` line [at this document](http://wiki.cyanogenmod.org/w/Build_for_grouper#Put_the_.7E.2Fbin_directory_in_your_path_of_execution).
+* I have added the beginnings of a bootstrap. It must be ran with sudo because it installs packages and changes your path. The bootstrap check can be skipped with ```./bootstrap --skip```
 
 
 ####You WILL want to edit the enviromental variables in ```BUILD```!
@@ -21,12 +21,21 @@ The ```BUILD``` file sets the environment and lets you choose your target device
     
 ### Usage
 
-Totally simple:  ```./HotSwapper make <ROMTYPE> <ANDROID_VERSION>```
+If you do not have a build environment, you need to bootstrap.
 
-Example: ```./HotSwapper make cm 4.4```
+    sudo ./bootstrap
+    
+After that runs, you can use the HotSwapper as usual.
 
-That will make a CyanogenMod Rom from the latest code for Android 4.4.
+Totally simple:  ```./hotswapper make <ROMTYPE>```
+
+Example: ```./hotswapper make cm```
+
+That will make a CyanogenMod from the latest code for Android 4.4. If you want an earlier Android version, you can pass <ANDROID_VERSION> as an additional argument.
+
+Example: ```./hotswapper make aosp 4.3```
 
 Valid <ROMTYPES> are: (aosp, aokp, pa, pac, vanir, omni, slim, cm)
+Valid <ANDROID_VERSIONS> depends on the ROM. But only 2.3 and up is supported for any!
 
-**Everything for the auto-patcher and patchScripts is freely available under the MIT License. See the included license for details.**
+**Everything here is published under the MIT License. See the included license for details.**
