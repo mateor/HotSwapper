@@ -42,11 +42,11 @@ usage () {
      echo "!! You will want to set some environmental variables in the BUILD file !!"
      echo ""
      echo "OPTIONS:"
-     echo "    ${bold}make${normal} ( ${bold}<ROMTYPE>${normal} || ${bold}<TARGET_VERSION>${normal} )" 
+     echo "    ${bold}make${normal} ( ${bold}<ROMTYPE>${normal} || ${bold}<ANDROID_VERSION>${normal} )" 
      echo "           : creates a flashable zip of one of several ROMTYPES"
      echo ""
      echo "             valid ${bold}ROMTYPES${normal} are ( aosp, cm, aokp, omni, pac, pa, vanir, slim)"
-     echo "             valid ${bold}TARGET_VERSION${normal} depends on ROMTYPE, it's the Android version:
+     echo "             valid ${bold}ANDROID_VERSION${normal} depends on ROMTYPE, it's the Android version:
                               (2.3, 4.0, 4.1. 4.2. 4.3. 4.4 )"
      echo "             This command should pull sources, lunch, and build binaries"
      echo ""

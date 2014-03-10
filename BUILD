@@ -43,7 +43,7 @@ TARGET=mako
 MANUFACTURER=lge
 
 # This is just a DEFAULT
-TARGET_VERSION=4.4
+ANDROID_VERSION=4.4
 # this is how many threads to sync and build. If you have old computer or bad internet set to 8 or even 4.
 JOBS=24
 # default build command
