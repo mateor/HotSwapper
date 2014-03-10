@@ -202,7 +202,7 @@ case "$1" in
           esac
      ;;
      omni)
-          GITHUB=PAC-man/android
+          GITHUB=OmniRom/android
           case "$ANDROID_VERSION" in
                4.3)
                TARGET_BRANCH=android-4.3
