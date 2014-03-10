@@ -182,7 +182,7 @@ case "$1" in
                TARGET_BRANCH=kk4.4
                ;;
           esac
-          BUILD_COMMAND=./rom-build.sh $TARGET
+          BUILD_COMMAND="./rom-build.sh $TARGET"
      ;;
      pac)
           GITHUB=PAC-man/android
@@ -197,7 +197,7 @@ case "$1" in
                TARGET_BRANCH=cm-10.2
                ;;
                4.4)
-               TARGET_BRANCH=cm-11.0
+               TARGET_BRANCH=pac-4.4
                ;;
           esac
      ;;
@@ -241,24 +241,35 @@ current=$(cat $IPC)
 echo "$1" > $IPC
 
 # remove old manifests and repo init if switching rom types
-if [[ "$1" != current  ]]; then
+remove_manifests() {
+
      rm -rf .repo/manifests manifests.xml
      rm -rf .repo/local_manifests local_manifests.xml
      $REPO_INIT_COMMAND
 
+}
+if [[ "$1" != $current  ]]; then
+     remove_manifests
 fi
 
-$REPO_SYNC_COMMAND
+$REPO_INIT_COMMAND
+$REPO_SYNC_COMMAND || remove_manifests
+
 . build/envsetup.sh
 $LUNCH_COMMAND
 
+install_term() {
 # deal with CM's totally irritating way of incorporating Android Terminal
 if [[ "$1" == "cm" ]]; then
      cd "$ANDROID_HOME"/vendor/cm
      ./get-prebuilts
      cd "$ANDROID_HOME"
 fi
+}
 
+if [[ "$1" == "cm" ]] || [[ "$1" == "pac" ]]; then
+     install_term
+fi
 
 # I may have to just check that the above went without error manually. I could capture stderr...hmmmph.
 $BUILD_COMMAND
