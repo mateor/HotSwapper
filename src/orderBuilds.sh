@@ -28,7 +28,6 @@
 [[ "$ANDROID_HOME" == "" ]] && ANDROID_HOME=~/android/system/jellybean
 [[ "$TARGET" == "" ]] && TARGET=mako
 [[ "$MANUFACTURER" == "" ]] && MANUFACTURER=lge                    # not often needed, only AOKP right now.
-[[ "$ANDROID_VERSION" == "" ]] && ANDROID_VERSION=4.4
 
 # adjust as per your machine- 8 might be a good start.
 REPO_SYNC_COMMAND="repo sync -j${JOBS} -f"
@@ -52,9 +51,10 @@ print_error() {
      echo ""
 }
 
-if [[ $# -gt 1 ]]; then
+if [[ $# == 2 ]]; then
      ANDROID_VERSION="$2"
 fi
+[[ "$ANDROID_VERSION" == "" ]] && ANDROID_VERSION=4.4
 
 # Perhaps one day to be expanded to take 'files to place' as a second parameter.
 if [[ $# -lt 1 ]]; then
