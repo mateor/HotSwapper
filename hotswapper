@@ -77,6 +77,49 @@ prompt_bootstrap() {
      exit 1
 }
 
+finish_bootstrap(){
+     echo ""
+     echo "We are going to finish the bootstrap now."
+     echo ""
+     # if they do not have repo, install it.
+     !( [ -n "$(command -v apt-get)" ] && install_repo
+     # If they do not have rules for udev, set them.
+     [ ! -f /etc/udev/rules.d/*android* ] || set_udev
+     echo BOOTSTRAP_COMPLETE=true >> "HOT_SWAPPER_LOC"/BUILD
+     
+     echo ""
+     echo "Your Build environment has been intialized."
+     echo ""
+     echo "  Please be aware we do not set-up CCACHE."
+     echo "  It can considerably speed up your builds but takes up to 100 gigs of disk."
+     echo "  If you can spare the space, see the directions on the Android website."
+     echo ""
+     echo "HotSwapper is ready to be run as you like. Enjoy!"
+     echo ""
+     exit 0
+}
+
+install_repo() {
+     mkdir -p ~/bin
+
+     mkdir curl http://commondatastorage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
+     chmod a+x ~/bin/repo
+
+     if !([ -d "~/bin" ] && [[ ":$PATH:" != *":~/bin:"* ]]); then
+          echo '# HotSwapper added bin to path for Android Builds'  >> ~/.bashrc
+          echo 'export PATH=${PATH}:~/bin' >> ~/.bashrc
+     fi
+
+     . source .bashrc
+     . source .bash_profile
+}
+
+set_udev() {
+     # I don't think we have to mess with the owner name. Let me know if you have problems.
+     # Udev rules courtesy of https://github.com/M0Rf30/android-udev-rules Thanks @M0Rf30!
+     cp "$HOT_SWAPPER_LOC"/lib/udev.rules  /etc/udev/rules.d/51-android.rules
+}
+
 if [[ "$#" == 0 ]]; then
      usage
 fi
@@ -94,6 +137,7 @@ done
 
 # check if they have bootstrapped. If not do so. This should be non-destructive to existing build enviroments.
 [[ "$BOOTSTRAPPED" == "true" ]] || prompt_bootstrap
+[[ ! "$BOOTSTRAP_COMPLETE" == "true" ]] && finish_ bootstrap
 
 case "$1" in
 [Mm]ake)

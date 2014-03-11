@@ -62,7 +62,7 @@ case "$CHK_BIT" in
 esac
 
 if !( [ -n "$(command -v apt-get)" ] || [[ "$OSTYPE" == "linux-gnu" ]] ); then
-     echo "HotSwapper is only configured to work with Linux systems that have apt-get"
+     echo "HotSwapper bootstrap is only configured to work with Linux systems that have apt-get"
      echo "Ubuntu is recommended by Android, that is what this program is tested on"
      exit 1
 fi
@@ -78,9 +78,11 @@ sleep 2
 sudo apt-get -y upgrade
 sudo add-apt-repository "deb http://archive.canonical.com/ lucid partner"
 sudo apt-get update
+
+# this needs fixing
 sudo apt-get -y install sun-java6-jdk || installation_problem
 
-# get the android-sdk
+# get the android-sdk -- requires license acceptance
 #wget "$CURRENT_SDK" -O "$HOT_SWAPPER_LOC"/tmp/android-sdk.tgz
 #tar -xzf android-sdk.tgz ~/
 #sudo -u "$USER"
@@ -91,33 +93,12 @@ sudo apt-get install -y git gnupg flex bison  g++-multilib gcc g++ cpp gcc-multi
 # sym link libGL for unknown reasons. Hide output if already done.
 sudo ln -s /usr/lib/i386-linux-gnu/mesa/libGL.so.1 /usr/lib/i386-linux-gnu/libGL.so >> /dev/null 2>&1
 
-
-# I don't think we have to mess with the owner name. Let me know if you have problems.
-# Udev rules courtesy of https://github.com/M0Rf30/android-udev-rules Thanks @M0Rf30!
-[ -f /etc/udev/rules.d/*android* ] || sudo -u "$USER" cp "$HOT_SWAPPER_LOC"/lib/udev.rules  /etc/udev/rules.d/51-android.rules
-
-# Install repo
-sudo -u "$USER" mkdir -p ~/bin
-
-sudo -u "$USER" mkdir curl http://commondatastorage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
-chmod a+x ~/bin/repo
-
-if !([ -d "~/bin" ] && [[ ":$PATH:" != *":~/bin:"* ]]); then
-     echo '# HotSwapper added bin to path for Android Builds'  >> ~/.bashrc
-     echo 'export PATH=${PATH}:~/bin' >> ~/.bashrc
-fi
-
-
-echo ""
-echo "Your Build environment has been intialized."
-echo ""
-echo "  Please be aware we do not set-up CCACHE."
-echo "  It can considerably speed up your builds but takes up to 100 gigs of disk."
-echo "  If you can spare the space, see the directions on the Android website."
-echo ""
-echo "HotSwapper is ready to be run as you like. Enjoy!"
-echo ""
 echo "BOOTSTRAPPED=true" >> "$HOT_SWAPPER_LOC"/BUILD
-. source .bashrc
-. source .bash_profile
+
+echo ""
+echo "    We have bootstrapped the necessary packages."
+echo "    The environment will be completed upon your first run of the hotswapper"
+echo ""
+
+
 exit 0
