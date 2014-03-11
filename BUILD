@@ -51,9 +51,12 @@ BUILD_COMMAND="make bacon"
 
 # ************  End Editing Enviroment   **********************
 
+# Android sdk
+CURRENT_SDK=http://dl.google.com/android/android-sdk_r22.6-linux.tgz
 IPC=$HOT_SWAPPER_LOC/.iproc
 
 bold=`tput bold`
 normal=`tput sgr0`
 
 exit_code=0
+BOOTSTRAPPED=true

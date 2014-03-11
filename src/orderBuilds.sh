@@ -252,6 +252,7 @@ if [[ "$1" != $current  ]]; then
      remove_manifests
 fi
 
+# This runs twice because it error-catches problems from canceled jobs
 $REPO_INIT_COMMAND
 $REPO_SYNC_COMMAND || remove_manifests
 

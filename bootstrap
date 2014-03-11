@@ -24,6 +24,12 @@
 
 source BUILD
 
+installation_problem() {
+	echo "Installation of packages has failed!"
+	echo "Please open an issue at github.com/mateor/HotSwapper"
+	exit 1
+}
+
 if [[ "$1" == "--skip" ]]; then
      echo ""
      echo "    You have disabled the HotSwapper bootstrap check."
@@ -31,7 +37,7 @@ if [[ "$1" == "--skip" ]]; then
      echo ""
      echo "    If you later decide you want to use bootstrap, you can run \"sudo ./bootstrap\" at any time"
      echo ""
-     touch $HOT_SWAPPER_LOC/.iproc
+     echo "BOOTSTRAPPED=true" >> "$HOT_SWAPPER_LOC"/BUILD
      exit 0
 fi
 
@@ -61,21 +67,26 @@ if !( [ -n "$(command -v apt-get)" ] || [[ "$OSTYPE" == "linux-gnu" ]] ); then
      exit 1
 fi
 
+# We have verified that this is 64 bit linux-gnu system with apt-get at this point.
+
 
 # Initialize a build environment for Linux users
 echo "...Initializing Environment..."
 sleep 2
 
-# Install packages
-#sudo add-apt-repository "deb http://archive.canonical.com/ lucid partner"
-#sudo apt-get update
-#sudo apt-get install sun-java6-jdk
+# get jdk
+sudo apt-get -y upgrade
+sudo add-apt-repository "deb http://archive.canonical.com/ lucid partner"
+sudo apt-get update
+sudo apt-get -y install sun-java6-jdk || installation_problem
 
-sudo apt-get install git gnupg flex bison gperf build-essential \
-  zip curl libc6-dev libncurses5-dev:i386 x11proto-core-dev \
-  libx11-dev:i386 libreadline6-dev:i386 libgl1-mesa-glx:i386 \
-  libgl1-mesa-dev g++-multilib mingw32 tofrodos \
-  python-markdown libxml2-utils xsltproc zlib1g-dev:i386
+# get the android-sdk
+#wget "$CURRENT_SDK" -O "$HOT_SWAPPER_LOC"/tmp/android-sdk.tgz
+#tar -xzf android-sdk.tgz ~/
+#sudo -u "$USER"
+
+# Install packages
+sudo apt-get install -y git gnupg flex bison  g++-multilib gcc g++ cpp gcc-multilib g++-4.8-multilib gperf build-essential curl libc6-dev libncurses5-dev:i386 x11proto-core-dev libx11-dev:i386 libreadline6-dev:i386 libgl1-mesa-glx:i386 libgl1-mesa-dev mingw32 tofrodos python-markdown libxml2-utils xsltproc zlib1g-dev:i386 || installation_problem
   
 # sym link libGL for unknown reasons. Hide output if already done.
 sudo ln -s /usr/lib/i386-linux-gnu/mesa/libGL.so.1 /usr/lib/i386-linux-gnu/libGL.so >> /dev/null 2>&1
@@ -83,13 +94,12 @@ sudo ln -s /usr/lib/i386-linux-gnu/mesa/libGL.so.1 /usr/lib/i386-linux-gnu/libGL
 
 # I don't think we have to mess with the owner name. Let me know if you have problems.
 # Udev rules courtesy of https://github.com/M0Rf30/android-udev-rules Thanks @M0Rf30!
-[ -f /etc/udev/rules.d/*android* ] || sudo cp "$HOT_SWAPPER_LOC"/lib/udev.rules  /etc/udev/rules.d/51-android.rules
+[ -f /etc/udev/rules.d/*android* ] || sudo -u "$USER" cp "$HOT_SWAPPER_LOC"/lib/udev.rules  /etc/udev/rules.d/51-android.rules
 
 # Install repo
-mkdir -p ~/bin
-mkdir -p ~/android/system
+sudo -u "$USER" mkdir -p ~/bin
 
-curl http://commondatastorage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
+sudo -u "$USER" mkdir curl http://commondatastorage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
 chmod a+x ~/bin/repo
 
 if !([ -d "~/bin" ] && [[ ":$PATH:" != *":~/bin:"* ]]); then
@@ -107,5 +117,7 @@ echo "  If you can spare the space, see the directions on the Android website."
 echo ""
 echo "HotSwapper is ready to be run as you like. Enjoy!"
 echo ""
-touch "$HOT_SWAPPER_LOC"/.iproc
+echo "BOOTSTRAPPED=true" >> "$HOT_SWAPPER_LOC"/BUILD
+. source .bashrc
+. source .bash_profile
 exit 0

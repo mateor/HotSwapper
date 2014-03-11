@@ -93,7 +93,7 @@ done
 [[ -d $ANDROID_HOME ]] || remind_about_BUILD
 
 # check if they have bootstrapped. If not do so. This should be non-destructive to existing build enviroments.
-[[ -f "$HOT_SWAPPER_LOC"/.iproc ]] || prompt_bootstrap
+[[ "$BOOTSTRAPPED" == "true" ]] || prompt_bootstrap
 
 case "$1" in
 [Mm]ake)
