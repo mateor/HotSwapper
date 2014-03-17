@@ -38,6 +38,7 @@ if [[ "$1" == "--skip" ]]; then
      echo "    If you later decide you want to use bootstrap, you can run \"sudo ./bootstrap\" at any time"
      echo ""
      echo "BOOTSTRAPPED=true" >> "$HOT_SWAPPER_LOC"/$SETUP_FILE
+     chmod 666 "$HOT_SWAPPER_LOC"/$SETUP_FILE
      exit 0
 fi
 
@@ -116,7 +117,7 @@ sudo ln -s /usr/lib/i386-linux-gnu/mesa/libGL.so.1 /usr/lib/i386-linux-gnu/libGL
 [ -f /etc/udev/rules.d/*android* ] || set_udev
 
 echo "BOOTSTRAPPED=true" >> "$HOT_SWAPPER_LOC"/$SETUP_FILE
-
+chmod 666 "$HOT_SWAPPER_LOC"/$SETUP_FILE
 echo ""
 echo "    We have bootstrapped the necessary packages."
 echo "    The environment will be completed upon your first run of the hotswapper"

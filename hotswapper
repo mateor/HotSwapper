@@ -78,12 +78,39 @@ prompt_bootstrap() {
      exit 1
 }
 
+install_repo() {
+     mkdir -p ~/bin
+     curl http://commondatastorage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
+     chmod a+x ~/bin/repo
+
+     if !([ -d "~/bin" ] && [[ ":$PATH:" != *":~/bin:"* ]]); then
+          echo '# HotSwapper added bin to path for Android Builds'  >> ~/.bashrc
+          echo 'export PATH=${PATH}:~/bin' >> ~/.bashrc
+     fi
+
+     source ~/.bashrc
+}
+
+install_sdk() {
+     echo "Downloading Android SDK. You will be prompted to accept the license."
+     echo "$CURRENT_SDK is current sdk"
+     wget "$CURRENT_SDK" -O "$HOT_SWAPPER_LOC"/android-sdk.tgz
+     tar -C ~/ -xf android-sdk.tgz
+     ~/android-sdk-linux/tools/android update sdk -u --filter platform-tools,android-"$MOST_RECENT_API",extra-android-support
+     if !([ -d "~/bin" ] && [[ ":$PATH:" != *":~/bin:"* ]]); then
+          echo '# Android SDK'  >> ~/.bashrc
+          echo 'PATH=${PATH}:~/android-sdk/tools' >> ~/.bashrc
+          echo 'PATH=${PATH}:~/android-sdk/platform-tools' >> ~/.bashrc
+     fi
+     #rm "$HOT_SWAPPER_LOC" rm android-sdk.tgz
+}
+
 finish_bootstrap() {
      echo ""
      echo "We are going to finish the bootstrap now."
      echo ""
      # if they do not have repo, install it.
-     [ -n "$(command -v apt-get)" ] || install_repo
+     [ -n "$(command -v repo)" ] || install_repo
      # get Android SDK
      [ -n "$(command -v android)" ] || install_sdk
      echo "BOOTSTRAP_COMPLETE=true" >> "$HOT_SWAPPER_LOC"/"$SETUP_FILE"
@@ -97,33 +124,6 @@ finish_bootstrap() {
      echo "HotSwapper is ready to be run as you like. Enjoy!"
      echo ""
      source ~/.bashrc && exit 0
-}
-
-install_repo() {
-     mkdir -p ~/bin
-
-     mkdir curl http://commondatastorage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
-     chmod a+x ~/bin/repo
-
-     if !([ -d "~/bin" ] && [[ ":$PATH:" != *":~/bin:"* ]]); then
-          echo '# HotSwapper added bin to path for Android Builds'  >> ~/.bashrc
-          echo 'export PATH=${PATH}:~/bin' >> ~/.bashrc
-     fi
-
-     . source .bashrc
-     . source .bash_profile
-}
-
-install_sdk() {
-     echo "Downloading Android SDK. You will be prompted to accept the license."
-     wget "$CURRENT_SDK" -O "$HOT_SWAPPER_LOC"/tmp/android-sdk.tgz
-     tar -xzf android-sdk.tgz ~/
-     ./android-sdk/tools/android update sdk -u --filter platform-tools,android-"$MOST_RECENT_API",extra-android-support
-     if !([ -d "~/bin" ] && [[ ":$PATH:" != *":~/bin:"* ]]); then
-          echo '# Android SDK'  >> ~/.bashrc
-          echo PATH=${PATH}:~/android-sdk/tools >> ~/.bashrc
-          echo PATH=${PATH}:~/android-sdk/platform-tools >> ~/.bashrc
-     fi
 }
 
 if [[ "$#" == 0 ]]; then
