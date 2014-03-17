@@ -72,7 +72,9 @@ fi
 set_udev() {
      # I don't think we have to mess with the owner name. Let me know if you have problems.
      # Udev rules courtesy of https://github.com/M0Rf30/android-udev-rules Thanks @M0Rf30!
-     cp "$HOT_SWAPPER_LOC"/lib/udev.rules  /etc/udev/rules.d/51-android.rules
+     sudo cp "$HOT_SWAPPER_LOC"/lib/udev.rules  /etc/udev/rules.d/51-android.rules
+     sudo udevadm control --reload-rules
+
 }
 
 
