@@ -85,10 +85,20 @@ sleep 2
 # get jdk
 sudo apt-get -y upgrade
 #sudo add-apt-repository "deb http://archive.canonical.com/ lucid partner"
+sudo add-apt-repository --yes ppa:webupd8team/java
 sudo apt-get update
 
 # this needs fixing
 #sudo apt-get -y install sun-java6-jdk || installation_problem
+
+#thanks to @trevd for these jdk lines.
+echo ""
+echo "We are installing the jdk and accepting the license."
+echo "   Your first born child is forfeit."
+echo ""
+sudo echo oracle-java6-installer shared/accepted-oracle-license-v1-1 select true | sudo /usr/bin/debconf-set-selections -v
+sudo apt-get --yes --force-yes install oracle-java6-installer:amd64
+
 
 # get the android-sdk -- requires license acceptance
 #wget "$CURRENT_SDK" -O "$HOT_SWAPPER_LOC"/tmp/android-sdk.tgz
