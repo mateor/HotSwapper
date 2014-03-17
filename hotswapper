@@ -30,6 +30,7 @@
 
 # populate environmental variables and pass to children
 source BUILD
+[[ -f "$SETUP_FILE" ]] && source "$SETUP_FILE"
 set -a
 
 
@@ -84,12 +85,11 @@ finish_bootstrap() {
      echo ""
      # if they do not have repo, install it.
      [ -n "$(command -v apt-get)" ] || install_repo
-     # If they do not have rules for udev, set them.
-     [ ! -f /etc/udev/rules.d/*android* ] || set_udev
-     echo BOOTSTRAP_COMPLETE=true >> "HOT_SWAPPER_LOC"/BUILD
-     
+     # get Android SDK
+     [ -n "$(command -v android)" ] || install_sdk
+     echo "BOOTSTRAP_COMPLETE=true" >> "$HOT_SWAPPER_LOC"/"$SETUP_FILE"
      echo ""
-     echo "Your Build environment has been intialized."
+     echo "Your Build environment has been intialized. You may need to restart your shell"
      echo ""
      echo "  Please be aware we do not set-up CCACHE."
      echo "  It can considerably speed up your builds but takes up to 100 gigs of disk."
@@ -97,7 +97,7 @@ finish_bootstrap() {
      echo ""
      echo "HotSwapper is ready to be run as you like. Enjoy!"
      echo ""
-     exit 0
+     source ~/.bashrc && exit 0
 }
 
 install_repo() {
@@ -115,10 +115,16 @@ install_repo() {
      . source .bash_profile
 }
 
-set_udev() {
-     # I don't think we have to mess with the owner name. Let me know if you have problems.
-     # Udev rules courtesy of https://github.com/M0Rf30/android-udev-rules Thanks @M0Rf30!
-     cp "$HOT_SWAPPER_LOC"/lib/udev.rules  /etc/udev/rules.d/51-android.rules
+install_sdk() {
+     echo "Downloading Android SDK. You will be prompted to accept the license."
+     wget "$CURRENT_SDK" -O "$HOT_SWAPPER_LOC"/tmp/android-sdk.tgz
+     tar -xzf android-sdk.tgz ~/
+     ./android-sdk/tools/android update sdk -u --filter platform-tools,android-"$MOST_RECENT_API",extra-android-support
+     if !([ -d "~/bin" ] && [[ ":$PATH:" != *":~/bin:"* ]]); then
+          echo '# Android SDK'  >> ~/.bashrc
+          echo PATH=${PATH}:~/android-sdk/tools >> ~/.bashrc
+          echo PATH=${PATH}:~/android-sdk/platform-tools >> ~/.bashrc
+     fi
 }
 
 if [[ "$#" == 0 ]]; then
@@ -137,8 +143,8 @@ done
 [[ -d $ANDROID_HOME ]] || remind_about_BUILD
 
 # check if they have bootstrapped. If not do so. This should be non-destructive to existing build enviroments.
-[[ "$BOOTSTRAPPED" == "true" ]] || prompt_bootstrap
-[[ ! "$BOOTSTRAP_COMPLETE" == "true" ]] && finish_ bootstrap
+[[ -f "$SETUP_FILE" ]] || prompt_bootstrap
+[[ ! "$BOOTSTRAP_COMPLETE" == "true" ]] && finish_bootstrap
 
 case "$1" in
 [Mm]ake)

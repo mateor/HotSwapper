@@ -38,6 +38,9 @@ HOT_SWAPPER_LOC=$(pwd)
 #    I could conceivably add that to this, but don't hold your breath, ok?
 ANDROID_HOME=~/android/system/jellybean
 
+# update as needed. For getting the SDK.
+
+MOST_RECENT_API=19
 # TARGET and MANUFACTURER should match your device tree
 TARGET=mako
 MANUFACTURER=lge
@@ -54,9 +57,9 @@ BUILD_COMMAND="make bacon"
 # Android sdk
 CURRENT_SDK=http://dl.google.com/android/android-sdk_r22.6-linux.tgz
 IPC=$HOT_SWAPPER_LOC/.iproc
+SETUP_FILE=.setup
 
 bold=`tput bold`
 normal=`tput sgr0`
 
 exit_code=0
-BOOTSTRAPPED=true

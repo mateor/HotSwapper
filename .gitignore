@@ -2,8 +2,9 @@
 *~
 *bak
 
-# IPC file
+# IPC file and setup file
 .iproc
+.setup
 
 # debugging log
 DEBUG.log
