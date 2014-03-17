@@ -37,10 +37,14 @@ if [[ "$1" == "--skip" ]]; then
      echo ""
      echo "    If you later decide you want to use bootstrap, you can run \"sudo ./bootstrap\" at any time"
      echo ""
-     echo "BOOTSTRAPPED=true" >> "$HOT_SWAPPER_LOC"/$SETUP_FILE
-     chmod 666 "$HOT_SWAPPER_LOC"/$SETUP_FILE
+     end_bootstrap
      exit 0
 fi
+
+end_bootstrap() {
+     echo "BOOTSTRAPPED=true" >> "$HOT_SWAPPER_LOC"/$SETUP_FILE
+     chmod 666 "$HOT_SWAPPER_LOC"/$SETUP_FILE
+}
 
 if [ "$(id -u)" != "0" ]; then
      echo ""
@@ -71,7 +75,6 @@ fi
 # We have verified that this is 64 bit linux-gnu system with apt-get at this point.
 
 set_udev() {
-     # I don't think we have to mess with the owner name. Let me know if you have problems.
      # Udev rules courtesy of https://github.com/M0Rf30/android-udev-rules Thanks @M0Rf30!
      sudo cp "$HOT_SWAPPER_LOC"/lib/udev.rules  /etc/udev/rules.d/51-android.rules
      sudo udevadm control --reload-rules
@@ -101,12 +104,6 @@ echo ""
 sudo echo oracle-java6-installer shared/accepted-oracle-license-v1-1 select true | sudo /usr/bin/debconf-set-selections -v
 sudo apt-get --yes --force-yes install oracle-java6-installer:amd64
 
-
-# get the android-sdk -- requires license acceptance
-#wget "$CURRENT_SDK" -O "$HOT_SWAPPER_LOC"/tmp/android-sdk.tgz
-#tar -xzf android-sdk.tgz ~/
-#sudo -u "$USER"
-
 # Install packages
 sudo apt-get install -y git gnupg flex bison  g++-multilib gcc g++ cpp gcc-multilib g++-4.8-multilib gperf build-essential curl libc6-dev libncurses5-dev:i386 x11proto-core-dev libx11-dev:i386 libreadline6-dev:i386 libgl1-mesa-glx:i386 libgl1-mesa-dev mingw32 tofrodos python-markdown libxml2-utils xsltproc zlib1g-dev:i386 || installation_problem
   
@@ -116,8 +113,7 @@ sudo ln -s /usr/lib/i386-linux-gnu/mesa/libGL.so.1 /usr/lib/i386-linux-gnu/libGL
 # If they do not have rules for udev, set them.
 [ -f /etc/udev/rules.d/*android* ] || set_udev
 
-echo "BOOTSTRAPPED=true" >> "$HOT_SWAPPER_LOC"/$SETUP_FILE
-chmod 666 "$HOT_SWAPPER_LOC"/$SETUP_FILE
+end_bootstrap
 echo ""
 echo "    We have bootstrapped the necessary packages."
 echo "    The environment will be completed upon your first run of the hotswapper"

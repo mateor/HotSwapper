@@ -96,13 +96,16 @@ install_sdk() {
      echo "$CURRENT_SDK is current sdk"
      wget "$CURRENT_SDK" -O "$HOT_SWAPPER_LOC"/android-sdk.tgz
      tar -C ~/ -xf android-sdk.tgz
+
+     # only downloaded base packages
      ~/android-sdk-linux/tools/android update sdk -u --filter platform-tools,android-"$MOST_RECENT_API",extra-android-support
-     if !([ -d "~/bin" ] && [[ ":$PATH:" != *":~/bin:"* ]]); then
+
+     if !([ -d "~/android-sdk*" ] && [[ ":$PATH:" != *":~/android*/tools:"* ]]); then
           echo '# Android SDK'  >> ~/.bashrc
           echo 'PATH=${PATH}:~/android-sdk/tools' >> ~/.bashrc
           echo 'PATH=${PATH}:~/android-sdk/platform-tools' >> ~/.bashrc
      fi
-     #rm "$HOT_SWAPPER_LOC" rm android-sdk.tgz
+     rm "$HOT_SWAPPER_LOC"/android-sdk.tgz
 }
 
 finish_bootstrap() {
@@ -115,13 +118,13 @@ finish_bootstrap() {
      [ -n "$(command -v android)" ] || install_sdk
      echo "BOOTSTRAP_COMPLETE=true" >> "$HOT_SWAPPER_LOC"/"$SETUP_FILE"
      echo ""
-     echo "Your Build environment has been intialized. You may need to restart your shell"
+     echo "Your Build environment has been intialized."
      echo ""
      echo "  Please be aware we do not set-up CCACHE."
      echo "  It can considerably speed up your builds but takes up to 100 gigs of disk."
      echo "  If you can spare the space, see the directions on the Android website."
      echo ""
-     echo "HotSwapper is ready to be run as you like. Enjoy!"
+     echo " Please close this shell and run HotSwapper in a new terminal."
      echo ""
      source ~/.bashrc && exit 0
 }

@@ -26,7 +26,7 @@
 
 # CHANGE THIS SECTION!!
 
-# This is my personal set up. I include it as an example, but it would be pretty easy to
+# This is my personal set up. I include it as an example, but it would be easy to
 #  end up clong the entire AOSP in a new directory, if you aren't aware.
 
 
@@ -34,28 +34,27 @@ HOT_SWAPPER_LOC=$(pwd)
 
 # ************  Start Editing Enviroment Here *****************
 
-# where you keep your source. You need all the dependencies and repo installed already.
-#    I could conceivably add that to this, but don't hold your breath, ok?
+# where you keep your source.
 ANDROID_HOME=~/android/system/jellybean
 
-# update as needed. For getting the SDK.
-
-MOST_RECENT_API=19
 # TARGET and MANUFACTURER should match your device tree
 TARGET=mako
 MANUFACTURER=lge
 
-# This is just a DEFAULT
+# update as needed. For getting SDK and using as default.
+CURRENT_SDK=http://dl.google.com/android/android-sdk_r22.6-linux.tgz
+MOST_RECENT_API=19
 ANDROID_VERSION=4.4
-# this is how many threads to sync and build. If you have old computer or bad internet set to 8 or even 4.
+
+# this is how many threads. If you have old computer or bad internet set to 8 or even 4.
 JOBS=24
-# default build command
+
+# default build command- generally don't edit unless targeting subsections of build
+#         ( i.e. framework.jar or other recovery.img)
 BUILD_COMMAND="make bacon"
 
-# ************  End Editing Enviroment   **********************
+# ************  End Editing  **********************
 
-# Android sdk
-CURRENT_SDK=http://dl.google.com/android/android-sdk_r22.6-linux.tgz
 IPC=$HOT_SWAPPER_LOC/.iproc
 SETUP_FILE=.setup
 
