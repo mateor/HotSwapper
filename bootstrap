@@ -83,10 +83,11 @@ echo "...Initializing Environment..."
 sleep 2
 
 # get jdk
-sudo apt-get -y upgrade
+
 #sudo add-apt-repository "deb http://archive.canonical.com/ lucid partner"
 sudo add-apt-repository --yes ppa:webupd8team/java
 sudo apt-get update
+sudo apt-get -y upgrade
 
 # this needs fixing
 #sudo apt-get -y install sun-java6-jdk || installation_problem

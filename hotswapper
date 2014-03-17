@@ -60,7 +60,7 @@ remind_about_BUILD() {
      echo " You must edit the files in ${HOT_SWAPPER_LOC}/BUILD"
      echo ""
      echo " This is a safety precaution to avoid downloads to accidental spots"
-     echo " Please create a directory to match the ANDROID_HOME entry in BUILD file."
+     echo " Please create a directory to matchgigit the ANDROID_HOME entry in BUILD file."
      echo ""
      exit 1
 }
@@ -69,13 +69,11 @@ prompt_bootstrap() {
      echo ""
      echo "    It looks like this is the first time you have run the HotSwapper."
      echo ""
-     echo "    In order to begin building Android ROMs, you must initialize the build environment."
-     echo "    Our bootstrap only support 64 bit debian linux"
-     echo ""
+     echo "    In order to begin building Android ROMs, you must "
+     echo "         initialize the build environment."
      echo "    \"sudo ./bootstrap\" will install the packages you need to build."
-     echo "    Bootstrapping requires sudo, because it installs packages."
      echo ""
-     echo "    Skip this and set up your own by running \"./bootstrap --skip\""
+     echo "    Skip this by running \"./bootstrap --skip\" and set up your own."
      echo ""
      exit 1
 }
