@@ -244,6 +244,7 @@ case "$1" in
                TARGET_BRANCH=pac-4.4
                ;;
           esac
+          BUILD_COMMAND="./build-pac.sh $TARGET"
      ;;
      omni)
           GITHUB=OmniRom/android
