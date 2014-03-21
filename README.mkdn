@@ -2,7 +2,14 @@
 ## HotSwapper
 #### A bash program to easily switch between building custom Android ROMs.
 
-This will allow you to quickly hotswap between building CyanogenMod to building ParanoidAndroid, or to building OmniRom or SlimRom. You _should_ be able to swap between build flavors and branches with one easy command.
+This will allow you to quickly hotswap between building CyanogenMod to building AOSP, or from building OmniRom to SlimRom. You _should_ be able to swap between build flavors and branches with one easy command.
+
+```./hotswapper make <ROMTYPE> <ANDROID_VERSION>```
+
+* Valid ```<ROMTYPES>``` are: (```aosp```, ```aokp```, ```pa```, ```pac```, ```vanir```, ```omni```, ```slim```, ```cm```)
+
+* Valid ```<ANDROID_VERSIONS>``` depends on the ROM. Examples are (```4.4```, ```4.3```, ```2.3```, etc)
+
 
 If you have not initialized a build environment, you can try our bootstrap. It must be ran with ```sudo``` because it installs packages and changes your path. The bootstrap check can be skipped with ```./bootstrap --skip```
 
@@ -12,24 +19,24 @@ The ```BUILD``` file sets the environment and lets you choose your target device
 
 You need to match to your device tree. Here I matched the ```android_device_lge_mako``` values.
 
-     ANDROID_HOME       # this is where you want your Android source tree
+     ANDROID_HOME=~/android/system/kitkat       # this can be anywhere you want the Android source to go
      TARGET=mako
      MANUFACTURER=lge
      ANDROID_VERSION=4.4
     
 ### Usage
 
-If you do not have a build environment, you need to bootstrap.
+If you do not have a build environment, you can try to bootstrap.
 
     sudo ./bootstrap
   
-After that runs, you can use the HotSwapper as usual.
+If that results in a succesful bootstrap, you can use the HotSwapper as usual.
 
 ```./hotswapper make <ROMTYPE>```
 
 * Example: ```./hotswapper make cm```
 
-* That will make a CyanogenMod from the latest code for Android 4.4.
+* Builds CyanogenMod from the latest code for Android 4.4.
 
 If you want an earlier Android version, you can pass <ANDROID_VERSION> as an additional argument.
 
@@ -37,12 +44,7 @@ If you want an earlier Android version, you can pass <ANDROID_VERSION> as an add
 
 * Example: ```./hotswapper make aosp 4.3```
 
-
-I have added several of the more popular roms, CyanogenMod, AOKP, AOSP, PACman, ParanoidAndroid, VanirAOSP, OmniRom, and SlimRom.
-
-Valid ```<ROMTYPES>``` are: (aosp, aokp, pa, pac, vanir, omni, slim, cm)
-
-Valid ````<ANDROID_VERSIONS>``` depends on the ROM. But only 2.3 and up is supported for any!
+I have loaded several roms: CyanogenMod, AOKP, AOSP, PACman, ParanoidAndroid, VanirAOSP, OmniRom, and SlimRom.
 
 ####Experimental
 
@@ -50,7 +52,7 @@ You can try passing an https address to the hotswapper. But you will need the br
 
      ./hotswapper make https://github.com/OmniRom/android android-4.4
      
-This is very much an unsupported feature at this time.
+This is a semi-unsupported feature at this time.
 
 ### Please Read
 * This __will not__ add support for your device if the ROM does not already provide it. All it does is make it easy to switch between Android flavors and branches, without requiring you to mess with the manifests or memorize github info.
