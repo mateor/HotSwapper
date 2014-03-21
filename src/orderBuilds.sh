@@ -29,6 +29,9 @@
 [[ "$TARGET" == "" ]] && TARGET=mako
 [[ "$MANUFACTURER" == "" ]] && MANUFACTURER=lge                    # not often needed, only AOKP right now.
 
+#TODO handle missing LOC variables so script can be called not as child.
+
+
 # adjust as per your machine- 8 might be a good start.
 REPO_SYNC_COMMAND="repo sync -j${JOBS} -f"
 [[ "$JOBS" == "" ]] && JOBS=24
@@ -39,9 +42,7 @@ LUNCH_COMMAND="lunch ${1}_${TARGET}-userdebug"
 # Needed to allow for AOKP, and anyone else who gets cute.
 DEFAULT_LUNCH_COMMAND="lunch aosp_$TARGET-userdebug"
 
-# If you want the whole rom, comment this line and uncomment the next.
 [[ "$BUILD_COMMAND" == "" ]] && BUILD_COMMAND="make -j${JOBS} bacon"
-#BUILD_COMMAND="make otapackage"
 
 print_error() {
      echo ""
@@ -49,6 +50,49 @@ print_error() {
      echo ""
      echo "Your build was not ordered correctly"
      echo ""
+}
+
+get_proprietary() {
+# This adds the appropriate proprietary files without requiring user to connect an actual device
+# One of those "grey areas" of the custom scene
+
+# Thanks to @CyanogenMod and @TheMuppets for maintaining the repos.
+
+     MANIFEST_HOME="$ANDROID_HOME"/.repo/local_manifests
+     MANIFEST="$MANIFEST_HOME"/hot_props.xml
+
+     # parse the CM branch
+     case "$ANDROID_VERSION" in
+     4.0)
+          PROP_BRANCH=ics
+          ;;
+     4.1)
+          PROP_BRANCH=jellybean
+          ;;
+     4.2)
+          PROP_BRANCH=cm-10.1
+          ;;
+     4.3)
+          PROP_BRANCH=cm-10.2
+          ;;
+     4.4)
+          PROP_BRANCH=cm-11.0
+          ;;
+     esac
+     mkdir -p "$MANIFEST_HOME"
+     touch "$MANIFEST"
+     # create our own local_manifest to handle proprietary files
+     echo '<?xml version="1.0" encoding="UTF-8"?>' > "$MANIFEST"
+     echo '<manifest>' >> "$MANIFEST"
+     echo '  <remote name="github_cm" fetch="git://github.com" />' >> "$MANIFEST"
+     echo -n '  <project name="TheMuppets/proprietary_vendor_' >> "$MANIFEST"
+     echo -n "$MANUFACTURER" >> "$MANIFEST"
+     echo -n '" path="vendor/' >> "$MANIFEST"
+     echo -n "$MANUFACTURER" >> "$MANIFEST"
+     echo -n '" remote="github_cm" revision="' >> "$MANIFEST"
+     echo -n "$PROP_BRANCH" >> "$MANIFEST"
+     echo '" />' >> "$MANIFEST"
+     echo '</manifest>' >> "$MANIFEST"
 }
 
 if [[ $# == 2 ]]; then
@@ -254,18 +298,20 @@ fi
 
 # This runs twice because it error-catches problems from canceled jobs
 $REPO_INIT_COMMAND
+
+# fetch the proprietary files
+get_proprietary "$ANDROID_VERSION" || print_error "Something went wrong with getting the proprietary files!"
+
 $REPO_SYNC_COMMAND || remove_manifests
 
 . build/envsetup.sh
 $LUNCH_COMMAND
 
 install_term() {
-# deal with CM's totally irritating way of incorporating Android Terminal
-if [[ "$1" == "cm" ]]; then
+     # deal with CM's totally irritating way of incorporating Android Terminal
      cd "$ANDROID_HOME"/vendor/cm
      ./get-prebuilts
      cd "$ANDROID_HOME"
-fi
 }
 
 if [[ "$1" == "cm" ]] || [[ "$1" == "pac" ]]; then
