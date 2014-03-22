@@ -50,6 +50,14 @@ print_error() {
      echo ""
      echo "Your build was not ordered correctly"
      echo ""
+     exit 1
+}
+
+remove_manifests() {
+     rm -rf .repo/manifests manifests.xml
+     rm -rf .repo/local_manifests local_manifests.xml
+     $REPO_INIT_COMMAND
+
 }
 
 get_proprietary() {
@@ -93,6 +101,17 @@ get_proprietary() {
      echo -n "$PROP_BRANCH" >> "$MANIFEST"
      echo '" />' >> "$MANIFEST"
      echo '</manifest>' >> "$MANIFEST"
+}
+
+clobber() {
+     make clobber
+}
+
+install_term() {
+     # deal with CM's totally irritating way of incorporating Android Terminal
+     cd "$ANDROID_HOME"/vendor/cm
+     ./get-prebuilts
+     cd "$ANDROID_HOME"
 }
 
 if [[ $# == 2 ]]; then
@@ -261,11 +280,11 @@ case "$1" in
           GITHUB_ADDRESS="$1"
           GITHUB=${GITHUB_ADDRESS//*.com\//}
           TARGET_BRANCH="$ANDROID_VERSION"
-          # The below works for us but won't provide full build. parsing lunch menu may be only current hope
+          # This is not guaranteed to work right now. Needs testing/better solution.
           LUNCH_COMMAND="$DEFAULT_LUNCH_COMMAND"
      ;;
      *)
-     print_error "Not a valid rom target." && exit -1
+     print_error "Not a valid rom target."
      ;;
 esac
 
@@ -285,16 +304,11 @@ current=$(cat $IPC)
 # record current ROMTYPE
 echo "$1" > $IPC
 
-# remove old manifests and repo init if switching rom types
-remove_manifests() {
 
-     rm -rf .repo/manifests manifests.xml
-     rm -rf .repo/local_manifests local_manifests.xml
-     $REPO_INIT_COMMAND
-
-}
-if [[ "$1" != $current  ]]; then
+if [[ "$1" != "$current"  ]]; then
+     # remove old manifests and repo init if switching rom types
      remove_manifests
+     CLOBBER=true
 fi
 
 # This runs twice because it error-catches problems from canceled jobs
@@ -308,12 +322,9 @@ $REPO_SYNC_COMMAND || remove_manifests
 . build/envsetup.sh
 $LUNCH_COMMAND
 
-install_term() {
-     # deal with CM's totally irritating way of incorporating Android Terminal
-     cd "$ANDROID_HOME"/vendor/cm
-     ./get-prebuilts
-     cd "$ANDROID_HOME"
-}
+# this flag set if switching romtypes is detected
+[[ "$CLOBBER" == "true" ]] && clobber
+
 
 if [[ "$1" == "cm" ]] || [[ "$1" == "pac" ]]; then
      install_term
