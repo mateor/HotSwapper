@@ -28,11 +28,13 @@
 
 # PLEASE edit values in BUILD file or WOE BETIDE YOU!
 
+HOT_SWAPPER_LOC="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+source "$HOT_SWAPPER_LOC"/BUILD
+
 # populate environmental variables and pass to children
-source BUILD
+
 [[ -f "$SETUP_FILE" ]] && source "$SETUP_FILE"
 set -a
-
 
 usage () {
      echo ""
@@ -136,7 +138,7 @@ fi
 # check for lifelines
 for arg in $@; do
      #TODO @mateor Add a help for each command
-     if ( [[ $arg == "h" ]] || [[ $arg == "-h" ]] || [[ $arg == "--h" ]] || [[ $arg == "help" ]] || [[ $arg == "-help" ]] || [[ $arg == "--help" ]] ); then
+     if ( [[ $arg == "h" ]] || [[ $arg == "-h" ]] || [[ $arg == "--h" ]] || [[ $arg == "help" ]] || [[ $arg == "-help" ]] || [[ $arg == "--help" ]] || $arg == "help" ); then
           usage
      fi
 done

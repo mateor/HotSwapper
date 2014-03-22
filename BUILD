@@ -30,18 +30,16 @@
 #  end up clong the entire AOSP in a new directory, if you aren't aware.
 
 
-HOT_SWAPPER_LOC=$(pwd)
-
 # ************  Start Editing Enviroment Here *****************
 
 # where you keep your source.
 ANDROID_HOME=~/android/system/jellybean
 
 # TARGET and MANUFACTURER should match your device tree
-TARGET=mako
-MANUFACTURER=lge
+TARGET=grouper
+MANUFACTURER=asus
 
-# update as needed. For getting SDK and using as default.
+# update as needed. For getting SDK as defaults. Hotswapper should work even if slightly out of date
 CURRENT_SDK=http://dl.google.com/android/android-sdk_r22.6-linux.tgz
 MOST_RECENT_API=19
 ANDROID_VERSION=4.4
@@ -50,10 +48,11 @@ ANDROID_VERSION=4.4
 JOBS=24
 
 # default build command- generally don't edit unless targeting subsections of build
-#         ( i.e. framework.jar or other recovery.img)
+#         ( i.e. framework.jar or recovery.img, etc.)
 BUILD_COMMAND="make bacon"
 
 # ************  End Editing  **********************
+
 
 IPC=$HOT_SWAPPER_LOC/.iproc
 SETUP_FILE=.setup
