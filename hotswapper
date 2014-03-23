@@ -138,7 +138,7 @@ fi
 # check for lifelines
 for arg in $@; do
      #TODO @mateor Add a help for each command
-     if ( [[ $arg == "h" ]] || [[ $arg == "-h" ]] || [[ $arg == "--h" ]] || [[ $arg == "help" ]] || [[ $arg == "-help" ]] || [[ $arg == "--help" ]] || $arg == "help" ); then
+     if ( [[ $arg == "h" ]] || [[ $arg == "-h" ]] || [[ $arg == "--h" ]] || [[ $arg == "help" ]] || [[ $arg == "-help" ]] || [[ $arg == "--help" ]] ); then
           usage
      fi
 done

@@ -67,40 +67,10 @@ get_proprietary() {
 # Thanks to @CyanogenMod and @TheMuppets for maintaining the repos.
 
      MANIFEST_HOME="$ANDROID_HOME"/.repo/local_manifests
-     MANIFEST="$MANIFEST_HOME"/hot_props.xml
-
-     # parse the CM branch
-     case "$ANDROID_VERSION" in
-     4.0)
-          PROP_BRANCH=ics
-          ;;
-     4.1)
-          PROP_BRANCH=jellybean
-          ;;
-     4.2)
-          PROP_BRANCH=cm-10.1
-          ;;
-     4.3)
-          PROP_BRANCH=cm-10.2
-          ;;
-     4.4)
-          PROP_BRANCH=cm-11.0
-          ;;
-     esac
+     MANIFEST="$HOT_SWAPPER_LOC"/lib/hot_props.xml
      mkdir -p "$MANIFEST_HOME"
-     touch "$MANIFEST"
-     # create our own local_manifest to handle proprietary files
-     echo '<?xml version="1.0" encoding="UTF-8"?>' > "$MANIFEST"
-     echo '<manifest>' >> "$MANIFEST"
-     echo '  <remote name="github_cm" fetch="git://github.com" />' >> "$MANIFEST"
-     echo -n '  <project name="TheMuppets/proprietary_vendor_' >> "$MANIFEST"
-     echo -n "$MANUFACTURER" >> "$MANIFEST"
-     echo -n '" path="vendor/' >> "$MANIFEST"
-     echo -n "$MANUFACTURER" >> "$MANIFEST"
-     echo -n '" remote="github_cm" revision="' >> "$MANIFEST"
-     echo -n "$PROP_BRANCH" >> "$MANIFEST"
-     echo '" />' >> "$MANIFEST"
-     echo '</manifest>' >> "$MANIFEST"
+     cp "$MANIFEST" "$MANIFEST_HOME"
+
 }
 
 clobber() {
