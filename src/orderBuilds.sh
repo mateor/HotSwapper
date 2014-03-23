@@ -70,8 +70,6 @@ get_proprietary() {
 # Thanks to @CyanogenMod and @TheMuppets for maintaining the repos.
      mkdir -p "$MANIFEST_HOME"
 
-     # We are removing any old manifests here since we are only appending when we add lines.
-     rm "$MANIFEST_HOME"/"$MANIFEST"
      touch "$MANIFEST_HOME"/"$MANIFEST"
      case "$ANDROID_VERSION" in
           4.0)
