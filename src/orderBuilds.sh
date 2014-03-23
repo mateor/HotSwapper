@@ -90,7 +90,7 @@ get_proprietary() {
      esac
      while read xml_line; do
           if [[ "$xml_line" != *">" ]]; then
-               echo $xml_line "branch=\"$PROP_BRANCH\" />" >> "$MANIFEST_HOME"/"$MANIFEST"
+               echo $xml_line "revision=\"$PROP_BRANCH\" />" >> "$MANIFEST_HOME"/"$MANIFEST"
           else
                echo $xml_line >> "$MANIFEST_HOME"/"$MANIFEST"
           fi
@@ -231,15 +231,17 @@ case "$1" in
           case "$ANDROID_VERSION" in
                4.2)
                TARGET_BRANCH=jellybean
+               BUILD_COMMAND="./rom-build.sh $TARGET"
                ;;
                4.3)
                TARGET_BRANCH=jb43
+               BUILD_COMMAND="./rom-build.sh $TARGET"
                ;;
                4.4)
-               TARGET_BRANCH=kk4.4
+               TARGET_BRANCH=kitkat
+               GITHUB=AOSPA/manifest
                ;;
           esac
-          BUILD_COMMAND="./rom-build.sh $TARGET"
      ;;
      pac)
           GITHUB=PAC-man/android
