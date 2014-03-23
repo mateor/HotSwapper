@@ -310,16 +310,21 @@ fi
 # This runs twice because it error-catches problems from canceled jobs
 $REPO_INIT_COMMAND
 
-# Sets up prop files
-if [ ! -f "$MANIFEST_HOME"/"$MANIFEST" ]; then
-     get_proprietary "$ANDROID_VERSION" || \
-               print_error "Something went wrong with getting the proprietary files!"
-fi
-
-$REPO_SYNC_COMMAND || remove_manifests
+$REPO_SYNC_COMMAND
 
 . build/envsetup.sh
 $LUNCH_COMMAND
+
+# Sets up prop files
+
+# Some roms supply prop files, some don't. We have failed builds if we assume wrongly either way
+[[ -f "$MANIFEST_HOME"/"$MANIFEST" ]] && rm "$MANIFEST_HOME"/"$MANIFEST"
+
+# If there are no "proprietary" repos in any manifests, add them ourselves.
+if ( ! find .repo/*manifest* -name "*xml" | xargs grep -s "proprietary_vendor" 2>&1 ); then
+     get_proprietary "$ANDROID_VERSION" || print_error "Problem with proprietary files!"
+     $REPO_SYNC_COMMAND
+fi
 
 # this flag set if switching romtypes is detected
 [[ "$CLOBBER" == "true" ]] && clobber

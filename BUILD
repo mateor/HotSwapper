@@ -30,7 +30,7 @@
 #  end up clong the entire AOSP in a new directory, if you aren't aware.
 
 
-# ************  Start Editing Enviroment Here *****************
+# ************  Start Editing Environment Here *****************
 
 # where you keep your source.
 ANDROID_HOME=~/android/system/jellybean
