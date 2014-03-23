@@ -31,6 +31,9 @@
 
 #TODO handle missing LOC variables so script can be called not as child.
 
+# This is to add proprietary files. There WILL be sync errors. Unfortunate but not fatal.
+MANIFEST_HOME="$ANDROID_HOME"/.repo/local_manifests
+MANIFEST=hot_props.xml
 
 # adjust as per your machine- 8 might be a good start.
 REPO_SYNC_COMMAND="repo sync -j${JOBS} -f"
@@ -65,12 +68,35 @@ get_proprietary() {
 # One of those "grey areas" of the custom scene
 
 # Thanks to @CyanogenMod and @TheMuppets for maintaining the repos.
-
-     MANIFEST_HOME="$ANDROID_HOME"/.repo/local_manifests
-     MANIFEST="$HOT_SWAPPER_LOC"/lib/hot_props.xml
      mkdir -p "$MANIFEST_HOME"
-     cp "$MANIFEST" "$MANIFEST_HOME"
 
+     # We are removing any old manifests here since we are only appending when we add lines.
+     rm "$MANIFEST_HOME"/"$MANIFEST"
+     touch "$MANIFEST_HOME"/"$MANIFEST"
+     case "$ANDROID_VERSION" in
+          4.0)
+          PROP_BRANCH=ics
+          ;;
+          4.1)
+          PROP_BRANCH=jellybean
+          ;;
+          4.2)
+          PROP_BRANCH=cm-10.1
+          ;;
+          4.3)
+          PROP_BRANCH=cm-10.2
+          ;;
+          4.4)
+          PROP_BRANCH=cm-11.0
+          ;;
+     esac
+     while read xml_line; do
+          if [[ "$xml_line" != *">" ]]; then
+               echo $xml_line "branch=\"$PROP_BRANCH\" />" >> "$MANIFEST_HOME"/"$MANIFEST"
+          else
+               echo $xml_line >> "$MANIFEST_HOME"/"$MANIFEST"
+          fi
+     done < "$HOT_SWAPPER_LOC"/lib/template.xml
 }
 
 clobber() {
@@ -284,8 +310,11 @@ fi
 # This runs twice because it error-catches problems from canceled jobs
 $REPO_INIT_COMMAND
 
-# fetch the proprietary files
-get_proprietary "$ANDROID_VERSION" || print_error "Something went wrong with getting the proprietary files!"
+# Sets up prop files
+if [ ! -f "$MANIFEST_HOME"/"$MANIFEST" ]; then
+     get_proprietary "$ANDROID_VERSION" || \
+               print_error "Something went wrong with getting the proprietary files!"
+fi
 
 $REPO_SYNC_COMMAND || remove_manifests
 
