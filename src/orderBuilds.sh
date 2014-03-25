@@ -57,8 +57,8 @@ print_error() {
 }
 
 remove_manifests() {
-     rm -rf .repo/manifests manifests.xml
-     rm -rf .repo/local_manifests local_manifests.xml
+     rm -rf .repo/manifests
+     rm -rf .repo/local_manifests
      $REPO_INIT_COMMAND
 
 }
@@ -131,7 +131,7 @@ fi
 
 case "$1" in
      aosp)
-          GITHUB=android/platform_manifest
+          GITHUB=https://android.googlesource.com/platform/manifest
           case "$ANDROID_VERSION" in
                4.0)
                TARGET_BRANCH=android-4.0.4_r2
@@ -149,6 +149,7 @@ case "$1" in
                TARGET_BRANCH=android-4.4_r1.1
                ;;
           esac
+          REPO_INIT_COMMAND="repo init -u $GITHUB -b $TARGET_BRANCH"
           BUILD_COMMAND="make otapackage"
      ;;
      cm)
@@ -284,11 +285,16 @@ case "$1" in
      ;;
 esac
 
-if [[ "$1" == aokp ]]; then
+case $1 in
+aokp)
      REPO_INIT_COMMAND="repo init -u https://github.com/$GITHUB -b $TARGET_BRANCH -g all,-notdefault,$TARGET,$MANUFACTURER"
-else
+     ;;
+aosp)
+     ;;
+*)
      REPO_INIT_COMMAND="repo init -u https://github.com/${GITHUB} -b $TARGET_BRANCH"
-fi
+     ;;
+esac
 
 # order builds
 cd $ANDROID_HOME
