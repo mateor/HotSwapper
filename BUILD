@@ -57,7 +57,7 @@ BUILD_COMMAND="make bacon"
 IPC=$HOT_SWAPPER_LOC/.iproc
 SETUP_FILE=.setup
 
-bold=`tput bold`
-normal=`tput sgr0`
+bold=$(tput bold)
+normal=$(tput sgr0)
 
 exit_code=0

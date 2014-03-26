@@ -59,8 +59,6 @@ print_error() {
 remove_manifests() {
      rm -rf .repo/manifests
      rm -rf .repo/local_manifests
-     $REPO_INIT_COMMAND
-
 }
 
 get_proprietary() {
@@ -313,7 +311,7 @@ if [[ "$1" != "$current"  ]]; then
      CLOBBER=true
 fi
 
-# This runs twice because it error-catches problems from canceled jobs
+# running it twice was breaking the removal of spurious files through the project.list mechanism
 $REPO_INIT_COMMAND
 
 $REPO_SYNC_COMMAND
