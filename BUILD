@@ -59,8 +59,8 @@ BUILD_COMMAND="make bacon"
 
 # ************  End Editing  **********************
 
+git update-index --assume-unchanged BUILD
 
-IPC=$HOT_SWAPPER_LOC/.iproc
 SETUP_FILE=.setup
 
 bold=$(tput bold)
