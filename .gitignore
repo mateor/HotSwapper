@@ -8,3 +8,6 @@
 
 # debugging log
 DEBUG.log
+
+# BUILD file to preserve identity security.
+BUILD

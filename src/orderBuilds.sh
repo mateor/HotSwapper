@@ -28,6 +28,8 @@
 [[ "$ANDROID_HOME" == "" ]] && ANDROID_HOME=~/android/system/jellybean
 [[ "$TARGET" == "" ]] && TARGET=mako
 [[ "$MANUFACTURER" == "" ]] && MANUFACTURER=lge                    # not often needed, only AOKP right now.
+[[ $(git config user.name) == "" ]] && $(git config user.name "$GIT_NAME")
+[[ $(git config user.name) == "" ]] && $(git config user.email "$GIT_EMAIL")
 
 #TODO handle missing LOC variables so script can be called not as child.
 

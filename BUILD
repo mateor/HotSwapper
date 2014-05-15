@@ -32,6 +32,12 @@
 
 # ************  Start Editing Environment Here *****************
 
+# Identity
+# You can leave this as is to stay anonymous- but git and AOSP ask for email/name.
+# This file is ignored by version control, so your info will not get pushed to github by default
+GIT_NAME="Your name"
+GIT_EMAIL="you@example.com"
+
 # where you keep your source.
 ANDROID_HOME=~/android/system/jellybean
 
