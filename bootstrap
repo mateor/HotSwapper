@@ -23,10 +23,14 @@
 # THE SOFTWARE.
 
 source BUILD
+HOT_SWAPPER_LOC="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 installation_problem() {
-	echo "Installation of packages has failed!"
-	echo "Please open an issue at github.com/mateor/HotSwapper"
+    echo ""
+	echo "!!! $@ !!!"
+	echo ""
+	echo "Did you edit the BUILD file?"
+	echo "If so, please open an issue at github.com/mateor/HotSwapper"
 	exit 1
 }
 
@@ -68,7 +72,7 @@ esac
 
 if !( [ -n "$(command -v apt-get)" ] || [[ "$OSTYPE" == "linux-gnu" ]] ); then
      echo "HotSwapper bootstrap is only configured to work with Linux systems that have apt-get"
-     echo "Ubuntu is recommended by Android, that is what this program is tested on"
+     echo "Ubuntu is recommended by Android, and is what this program is tested on"
      exit 1
 fi
 
@@ -76,7 +80,8 @@ fi
 
 set_udev() {
      # Udev rules courtesy of https://github.com/M0Rf30/android-udev-rules Thanks @M0Rf30!
-     sudo cp "$HOT_SWAPPER_LOC"/lib/udev.rules  /etc/udev/rules.d/51-android.rules
+     sudo cp "$HOT_SWAPPER_LOC"/lib/udev.rules  /etc/udev/rules.d/51-android.rules || \
+               installation_problem "Copying udev rules failed"
      sudo udevadm control --reload-rules
 
 }
@@ -103,7 +108,7 @@ sudo echo oracle-java6-installer shared/accepted-oracle-license-v1-1 select true
 sudo apt-get --yes --force-yes install oracle-java6-installer:amd64
 
 # Install packages
-sudo apt-get install -y git gnupg flex bison  g++-multilib gcc g++ cpp gcc-multilib g++-4.8-multilib gperf build-essential curl libc6-dev libncurses5-dev:i386 x11proto-core-dev libx11-dev:i386 libreadline6-dev:i386 libgl1-mesa-glx:i386 libgl1-mesa-dev mingw32 tofrodos python-markdown libxml2-utils xsltproc zlib1g-dev:i386 || installation_problem
+sudo apt-get install -y git gnupg flex bison  g++-multilib gcc g++ cpp gcc-multilib g++-4.8-multilib gperf build-essential curl libc6-dev libncurses5-dev:i386 x11proto-core-dev libx11-dev:i386 libreadline6-dev:i386 libgl1-mesa-glx:i386 libgl1-mesa-dev mingw32 tofrodos python-markdown libxml2-utils xsltproc zlib1g-dev:i386 || installation_problem "Installation on packages failed"
   
 # sym link libGL for unknown reasons. Hide output if already done.
 sudo ln -s /usr/lib/i386-linux-gnu/mesa/libGL.so.1 /usr/lib/i386-linux-gnu/libGL.so >> /dev/null 2>&1
