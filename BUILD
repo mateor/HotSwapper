@@ -59,6 +59,7 @@ BUILD_COMMAND="make bacon"
 
 # ************  End Editing  **********************
 
+# this keeps changes from going in version control
 git update-index --assume-unchanged BUILD
 
 SETUP_FILE=.setup

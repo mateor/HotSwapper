@@ -28,8 +28,10 @@
 [[ "$ANDROID_HOME" == "" ]] && ANDROID_HOME=~/android/system/jellybean
 [[ "$TARGET" == "" ]] && TARGET=mako
 [[ "$MANUFACTURER" == "" ]] && MANUFACTURER=lge                    # not often needed, only AOKP right now.
-[[ $(git config user.name) == "" ]] && $(git config user.name "$GIT_NAME")
-[[ $(git config user.name) == "" ]] && $(git config user.email "$GIT_EMAIL")
+
+#Setting git info globally is not ideal, as we default to anonymous. But it is needed for all repos
+git config --global user.name "$GIT_NAME"
+git config --global user.email "$GIT_EMAIL"
 
 #TODO handle missing LOC variables so script can be called not as child.
 
@@ -343,4 +345,6 @@ fi
 # I may have to just check that the above went without error manually. I could capture stderr...hmmmph.
 $BUILD_COMMAND
 
-
+# unset the global git names (so as not to cause dumb probs later.
+git config --global --unset user.name $GIT_NAME
+git config --global --unset user.email $GIT_EMAIL
