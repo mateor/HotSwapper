@@ -154,9 +154,7 @@ case "$1" in
 [Mm]ake)
      # I would at one point like to manage the exit code to make these conditional
      #    but it will require some investigation into the standard return values from make.
-     
-     # echo y sets the colors in terminal the first run and harmless afterwards.
-     echo "y" | source $HOT_SWAPPER_LOC/src/orderBuilds.sh "$2" "$3"
+     source $HOT_SWAPPER_LOC/src/orderBuilds.sh "$2" "$3"
      ;;
 [Pp]ull)
      # just fetch sources and don't compile

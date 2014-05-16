@@ -304,6 +304,7 @@ cd $ANDROID_HOME
 # Only remove old manifests if we are switching roms
 
 #check last build ROMTYPE
+# TODO: Handle null case
 current=$(cat $IPC)
 # record current ROMTYPE
 echo "$1" > $IPC
@@ -315,8 +316,8 @@ if [[ "$1" != "$current"  ]]; then
      CLOBBER=true
 fi
 
-# running it twice was breaking the removal of spurious files through the project.list mechanism
-$REPO_INIT_COMMAND
+# echo "y" allows colors in term, needs to be done since we unset the user each run.
+echo "y" | $REPO_INIT_COMMAND
 
 $REPO_SYNC_COMMAND
 
@@ -345,6 +346,6 @@ fi
 # I may have to just check that the above went without error manually. I could capture stderr...hmmmph.
 $BUILD_COMMAND
 
-# unset the global git names (so as not to cause dumb probs later.
-git config --global --unset user.name $GIT_NAME
-git config --global --unset user.email $GIT_EMAIL
+# unset the global git names if unfilled by the user (in BUILD file)
+git config --unset user.name "Your name"
+git config --unset user.email "you@example.com"

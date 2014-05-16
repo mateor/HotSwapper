@@ -34,7 +34,7 @@
 
 # Identity
 # You can leave this as is to stay anonymous- but git and AOSP ask for email/name.
-# This file is ignored by version control, so your info will not get pushed to github by default
+# This file is ignored by version control, and is unset after each run if unchanged in this file.
 GIT_NAME="Your name"
 GIT_EMAIL="you@example.com"
 
@@ -59,7 +59,7 @@ BUILD_COMMAND="make bacon"
 
 # ************  End Editing  **********************
 
-# this keeps changes from going in version control
+# this keeps changes in BUILD from going in version control
 git update-index --assume-unchanged BUILD
 IPC=$HOT_SWAPPER_LOC/.iproc
 SETUP_FILE=.setup
