@@ -100,7 +100,7 @@ install_sdk() {
      tar -C ~/ -xf android-sdk.tgz
 
      # only downloaded base packages
-     ~/android-sdk-linux/tools/android update sdk -u --filter platform-tools,android-"$MOST_RECENT_API",extra-android-support
+     echo "y" | ~/android-sdk-linux/tools/android update sdk -u --filter platform-tools,android-"$MOST_RECENT_API",extra-android-support
 
      if !([ -d "~/android-sdk*" ] && [[ ":$PATH:" != *":~/android*/tools:"* ]]); then
           echo '# Android SDK'  >> ~/.bashrc
