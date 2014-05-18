@@ -347,5 +347,5 @@ fi
 $BUILD_COMMAND
 
 # unset the global git names if unfilled by the user (in BUILD file)
-git config --unset user.name "Your name"
-git config --unset user.email "you@example.com"
+git config --unset --global user.name "Your name"
+git config --unset --global user.email "you@example.com"
