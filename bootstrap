@@ -108,7 +108,10 @@ sudo echo oracle-java6-installer shared/accepted-oracle-license-v1-1 select true
 sudo apt-get --yes --force-yes install oracle-java6-installer:amd64
 
 # Install packages
-sudo apt-get install -y git gnupg schedtool flex bison  g++-multilib gcc g++ cpp gcc-multilib g++-4.8-multilib gperf build-essential curl libc6-dev libncurses5-dev:i386 x11proto-core-dev libx11-dev:i386 libreadline6-dev:i386 libgl1-mesa-glx:i386 libgl1-mesa-dev mingw32 tofrodos python-markdown libxml2-utils xsltproc zlib1g-dev:i386 || installation_problem "Installation on packages failed"
+sudo apt-get install -y git gnupg schedtool flex bison  g++-multilib gcc g++ cpp gcc-multilib \
+g++-4.8-multilib gperf build-essential curl libc6-dev libncurses5-dev:i386 x11proto-core-dev \
+libx11-dev:i386 libreadline6-dev:i386 libgl1-mesa-glx:i386 libgl1-mesa-dev mingw32 tofrodos \
+python-markdown libxml2-utils xsltproc zlib1g-dev:i386 lzop || installation_problem "Installation on packages failed"
   
 # sym link libGL for unknown reasons. Hide output if already done.
 sudo ln -s /usr/lib/i386-linux-gnu/mesa/libGL.so.1 /usr/lib/i386-linux-gnu/libGL.so >> /dev/null 2>&1

@@ -22,12 +22,12 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-# order builds for SlimRom, CyanogenMod, AOKP, AOSP, PAC-man, OmniRom, ParanoidAndroid and whomever else.
+# order builds for SlimRom, CyanogenMod, AOKP, AOSP, PAC-man, OmniRom, ParanoidAndroid etc..
 
 # If you want to adjust, do it in BUILD if possible.
 [[ "$ANDROID_HOME" == "" ]] && ANDROID_HOME=~/android/system/jellybean
 [[ "$TARGET" == "" ]] && TARGET=mako
-[[ "$MANUFACTURER" == "" ]] && MANUFACTURER=lge                    # not often needed, only AOKP right now.
+[[ "$MANUFACTURER" == "" ]] && MANUFACTURER=lge    # not often needed, only AOKP right now.
 
 #Setting git info globally is not ideal, as we default to anonymous. But it is needed for all repos
 git config --global user.name "$GIT_NAME"
@@ -39,7 +39,7 @@ git config --global user.email "$GIT_EMAIL"
 MANIFEST_HOME="$ANDROID_HOME"/.repo/local_manifests
 MANIFEST=hot_props.xml
 
-# adjust as per your machine- 8 might be a good start.
+# adjust in the BUILD file as per your machine- 8 might be a good start.
 REPO_SYNC_COMMAND="repo sync -j${JOBS} -f"
 [[ "$JOBS" == "" ]] && JOBS=24
 
@@ -343,7 +343,7 @@ if [[ "$1" == "cm" ]] || [[ "$1" == "pac" ]]; then
      install_term
 fi
 
-# I may have to just check that the above went without error manually. I could capture stderr...hmmmph.
+# I may have to check that the above went without error manually. I could capture stderr...hmmmph.
 $BUILD_COMMAND
 
 # unset the global git names if unfilled by the user (in BUILD file)
