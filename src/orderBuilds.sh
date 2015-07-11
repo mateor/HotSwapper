@@ -172,6 +172,9 @@ case "$1" in
                4.4)
                TARGET_BRANCH=cm-11.0
                ;;
+               *)
+               TARGET_BRANCH=$ANDROID_VERSION
+               ;;
           esac
           BUILD_COMMAND="mka bacon"
      ;;
@@ -286,6 +289,9 @@ case "$1" in
      print_error "Not a valid rom target."
      ;;
 esac
+
+# Support arbitrary branch names...this has ZERO error catching. If misspelled...woe.
+[[ "$TARGET_BRANCH" == "" ]] && TARGET_BRANCH="$ANDROID_VERSION"
 
 case $1 in
 aokp)
