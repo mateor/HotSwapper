@@ -48,6 +48,14 @@ I have loaded several roms: CyanogenMod, AOKP, AOSP, PACman, ParanoidAndroid, Va
 
 ####Experimental
 
+*Build from a tag*:
+Add a fith arg that matches the tag name:
+
+	./hotswapper make cm 4.4 stable/cm-11.0
+This is pretty hacky and has no error catching right now!
+
+ 
+*Sync and build from an arbitrary repo*:
 You can try passing an https address to the hotswapper. But you will need the branch name in this case.
 
      ./hotswapper make https://github.com/OmniRom/android android-4.4

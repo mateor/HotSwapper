@@ -115,7 +115,10 @@ if [[ $# == 2 ]]; then
 fi
 [[ "$ANDROID_VERSION" == "" ]] && ANDROID_VERSION=4.4
 
+
+BRANCH=0
 if [[ $# == 3 ]]; then
+     BRANCH=1
      BRANCH_NAME="$3"
 fi
 
@@ -295,7 +298,7 @@ case "$1" in
 esac
 
 # Support arbitrary branch names...this has ZERO error catching. If misspelled...woe.
-[[ "$BRANCH_NAME" == "" ]] && TARGET_BRANCH="$BRANCH_NAME"
+[[ "$BRANCH" -gt 0 ]] && TARGET_BRANCH="$BRANCH_NAME"
 
 case $1 in
 aokp)
@@ -327,6 +330,7 @@ if [[ "$1" != "$current"  ]]; then
 fi
 
 # echo "y" allows colors in term, needs to be done since we unset the user each run.
+echo "Running: $REPO_INIT_COMMAND"
 echo "y" | $REPO_INIT_COMMAND
 
 $REPO_SYNC_COMMAND
