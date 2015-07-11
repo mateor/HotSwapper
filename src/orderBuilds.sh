@@ -115,6 +115,10 @@ if [[ $# == 2 ]]; then
 fi
 [[ "$ANDROID_VERSION" == "" ]] && ANDROID_VERSION=4.4
 
+if [[ $# == 3 ]]; then
+     BRANCH_NAME="$3"
+fi
+
 # Perhaps one day to be expanded to take 'files to place' as a second parameter.
 if [[ $# -lt 1 ]]; then
      echo ""
@@ -291,7 +295,7 @@ case "$1" in
 esac
 
 # Support arbitrary branch names...this has ZERO error catching. If misspelled...woe.
-[[ "$TARGET_BRANCH" == "" ]] && TARGET_BRANCH="$ANDROID_VERSION"
+[[ "$BRANCH_NAME" == "" ]] && TARGET_BRANCH="$BRANCH_NAME"
 
 case $1 in
 aokp)
